@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.0.0/dygraph.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <section class="page-header">
@@ -85,11 +86,15 @@ This would allow our team to spend less time on the real-world jobs and more tim
 
   </body>
   <script type="text/javascript">
-    // I love TES3MP!
-
+  const instance = axios.create({
+    baseURL: 'https://cors-anywhere.herokuapp.com/http://185.241.192.136:80/api',
+    headers: {'X-Requested-With': '1'}
+  });
+  instance.get('/stats').then(function(res) {
+    var data = res.data;
     g3 = new Dygraph(
       document.getElementById("graphdiv3"),
-      "http://185.241.192.136:3000/api/stats",
+      data,
       {
         legend: 'always',
         labelsSeparateLines: 'true',
@@ -101,6 +106,10 @@ This would allow our team to spend less time on the real-world jobs and more tim
         digitsAfterDecimal: 0
       }
     );
+  });
+
+    // I love TES3MP!
+
 
   </script>
 </html>
