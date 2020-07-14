@@ -8,6 +8,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.0.0/dygraph.js"></script>
   </head>
   <body>
     <section class="page-header">
@@ -16,8 +17,8 @@
     </section>
 
     <section class="main-content">
-      <p>Skyrim Multiplayer (SkyMP) is a modification for Skyrim SE allowing to play online.</p>
-<p>&lt; DOWNLOAD BUTTON &gt;</p>
+      <center><p>Skyrim Multiplayer (SkyMP) is a modification for Skyrim SE allowing to play online.</p></center>
+<center><a href="https://github.com/skyrim-multiplayer/skymp5-binaries/archive/master.zip">Download</a></center>
 <h1>
 <a id="goals" class="anchor" href="#goals" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Goals</h1>
 <ul>
@@ -32,23 +33,29 @@
 <h1>
 <a id="state-of-the-project" class="anchor" href="#state-of-the-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>State of the project</h1>
 <p>You are free to download our game client and play public servers or host your own. 0 users are playing on 0 servers right now.</p>
+
+<table><tr>
+<td style="border:none"><div id="graphdiv3" style="width:630px; height:180px;"></div></td>
+<td style="border:none"><div id="graphlabeldiv" style="font-size:0.8em;"></div></td>
+</tr></table>
+
 <h3>
 <a id="multiplayer-stats" class="anchor" href="#multiplayer-stats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Multiplayer Stats</h3>
-<p>&lt; Monitoring link &gt;</p>
+<a href="monitoring.html">View server list</a>
 <p>Current users per server limit equals 30.
 Supported server platforms: Windows.
 Autoupdate: Not implemented, for now, you need to update client files manually.
 Synchronizations Starter Pack (selected means available now):</p>
 <ul>
-<li>[x] Movement</li>
-<li>[x] Animation events</li>
-<li>[ ] Appearance &lt;==== We are here</li>
-<li>[ ] Names</li>
-<li>[ ] Equipment</li>
-<li>[ ] Inventory</li>
-<li>[ ] Actor Values (Health, Magicka, Stamina, etc)</li>
-<li>[ ] Melee damage (PvP)</li>
-<li>[ ] Death</li>
+<li><input type="checkbox" checked onclick="return false"> Movement</li>
+<li><input type="checkbox" checked onclick="return false"> Animation events</li>
+<li><input type="checkbox" onclick="return false"> Appearance &lt;==== We are here</li>
+<li><input type="checkbox" onclick="return false"> Names</li>
+<li><input type="checkbox" onclick="return false"> Equipment</li>
+<li><input type="checkbox" onclick="return false"> Inventory</li>
+<li><input type="checkbox" onclick="return false"> Actor Values (Health, Magicka, Stamina, etc)</li>
+<li><input type="checkbox" onclick="return false"> Melee damage (PvP)</li>
+<li><input type="checkbox" onclick="return false"> Death</li>
 </ul>
 <h1>
 <a id="donations" class="anchor" href="#donations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Donations</h1>
@@ -75,6 +82,25 @@ This would allow our team to spend less time on the real-world jobs and more tim
 
     </section>
 
-  
+
   </body>
+  <script type="text/javascript">
+    // I love TES3MP!
+
+    g3 = new Dygraph(
+      document.getElementById("graphdiv3"),
+      "http://185.241.192.136:3000/api/stats",
+      {
+        legend: 'always',
+        labelsSeparateLines: 'true',
+        labelsDiv: 'graphlabeldiv',
+        fractions: false,
+        fillGraph: true,
+        showRangeSelector: true,
+        rangeSelectorHeight: 25,
+        digitsAfterDecimal: 0
+      }
+    );
+
+  </script>
 </html>

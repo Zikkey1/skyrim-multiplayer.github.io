@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Skyrim Multiplayer by skyrim-multiplayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body onLoad="buildHtmlTable('#excelDataTable')">
+    <section class="page-header">
+      <h1 class="project-name">Skyrim Multiplayer</h1>
+      <h2 class="project-tagline"></h2>
+    </section>
+
+    <section class="main-content">
+        <a href="index.html">Back</a><br><br><br>
+        <table id="excelDataTable" border="0"></table>
+    </section>
+
+
+  </body>
+  <script type="text/javascript">
+
+// Builds the HTML Table out of myList.
+function buildHtmlTable(selector) {
+  axios({
+  method: 'get',
+  url: 'http://185.241.192.136:3000/api/servers',
+  responseType: 'stream'
+})
+  .then(function (response) {
+    var data = response.data;
+    for (var i = 0; i < data.length; ++i) {
+      data[i]['№'] = i + 1;
+
+      data[i]['Server Name'] = data[i].name;
+      delete data[i].name;
+
+      data[i]['Players'] = data[i].online + ' / ' + data[i].maxPlayers;
+      delete data[i].maxPlayers;
+      delete data[i].online;
+
+      data[i]['Address'] = data[i].ip + ':' + data[i].port;
+      delete data[i].ip;
+      delete data[i].port;
+
+      data[i]['Description'] ='—';
+      data[i]['Spoken Language'] ='—';
+
+      delete data[i].lastUpdate;
+    }
+    var myList = data;
+
+    var columns = addAllColumnHeaders(myList, selector);
+
+    for (var i = 0; i < myList.length; i++) {
+      var row$ = $('<tr/>');
+      for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+        var cellValue = myList[i][columns[colIndex]];
+        if (cellValue == null) cellValue = "";
+        row$.append($('<td/>').html(cellValue));
+      }
+      $(selector).append(row$);
+    }
+
+    console.log(response.data);
+  });
+}
+
+// Adds a header row to the table and returns the set of columns.
+// Need to do union of keys from all records as some records may not contain
+// all records.
+function addAllColumnHeaders(myList, selector) {
+  var columnSet = [];
+  var headerTr$ = $('<tr/>');
+
+  for (var i = 0; i < myList.length; i++) {
+    var rowHash = myList[i];
+    for (var key in rowHash) {
+      if ($.inArray(key, columnSet) == -1) {
+        columnSet.push(key);
+        headerTr$.append($('<th/>').html(key));
+      }
+    }
+  }
+  $(selector).append(headerTr$);
+
+  return columnSet;
+}
+  </script>
+</html>
